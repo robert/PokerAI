@@ -13,7 +13,7 @@ module Poker
 
     def deal_game
       until @game.players.any?(&:bust?) || @game.hands.count > 100
-        hand = Poker::Hand.new(sel )
+        hand = Poker::Hand.new(@game)
         @game.hands << hand
         Poker::HandDealer.new(hand).deal_hand
       end

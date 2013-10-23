@@ -15,18 +15,18 @@ module Poker
 
     def all_actions
       all_actions = []
-      self.actions.each do |street, actions|
+      @actions.each do |street, actions|
         all_actions += actions
       end
       all_actions
     end
 
     def current_street
-      if actions[:river].any?
+      if @actions[:river].any?
         :river
-      elsif actions[:turn].any?
+      elsif @actions[:turn].any?
         :turn
-      elsif actions[:flop].any?
+      elsif @actions[:flop].any?
         :flop
       else
         :preflop

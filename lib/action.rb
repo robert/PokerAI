@@ -11,7 +11,7 @@ module Poker
     end
 
     def concludes_street?
-      @type.in?([:call, :fold])
+      [:call, :fold].include?(@type)
     end
 
     TYPES.each do |type|

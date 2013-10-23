@@ -1,6 +1,6 @@
 module Poker
   class HandDealer
-    attr_reader :hand, :small_blind, :big_blind
+    attr_reader :hand
 
     def initialize hand
       @hand = hand
@@ -10,8 +10,8 @@ module Poker
       post_small_blind @hand.small_blind
       post_big_blind @hand.big_blind
 
-      small_blind.hole_cards = @hand.deck.deal(2)
-      big_blind.hole_cards = @hand.deck.deal(2)
+      @hand.small_blind.hole_cards = @hand.deck.deal(2)
+      @hand.big_blind.hole_cards = @hand.deck.deal(2)
 
       betting_for_street :preflop
       award_pot and return if @hand.finished?
@@ -35,16 +35,16 @@ module Poker
     def resolve_action action
       send(action.type, action.player)
       
-      puts "#{action.player.name}\t#{action.type.capitalize}\t#{@hand.pot_size}\t#{@hand.players[0].stack_size}\t#{@hand.players[1].stack_size}"
+      puts "#{action.player.name}\t#{action.type.capitalize}\t#{@hand.pot_size}\t#{@hand.game.players[0].stack_size}\t#{@hand.game.players[1].stack_size}"
     end
 
     def deal_community_cards n_cards
-      @hand.hand.community_cards += @hand.deck.deal(n_cards)
-      puts @hand.community_cards.to_sentence
+      @hand.community_cards += @hand.deck.deal(n_cards)
+      puts @hand.community_cards.join(",")
     end
 
     def betting_for_street street
-      next_actor = (street == :preflop) ? small_blind : big_blind
+      next_actor = (street == :preflop) ? @hand.small_blind : @hand.big_blind
 
       begin
         last_action = Poker::Action.new next_actor, @hand, next_actor.decide( @hand.current_state )
@@ -52,7 +52,7 @@ module Poker
 
         resolve_action last_action
 
-        next_actor = (next_actor == small_blind) ? big_blind : small_blind
+        next_actor = (next_actor == @hand.small_blind) ? @hand.big_blind : @hand.small_blind
       end while not last_action.concludes_street?
     end
 
@@ -60,9 +60,9 @@ module Poker
       @hand.winner.stack_size += @hand.pot_size
 
       puts ["",
-      "#{ small_blind.name } HAS #{ small_blind.hole_cards }",
-      "#{ big_blind.name } HAS #{ big_blind.hole_cards }",
-      @hand.community_cards.to_sentence,
+      "#{ @hand.small_blind.name } HAS #{ @hand.small_blind.hole_cards }",
+      "#{ @hand.big_blind.name } HAS #{ @hand.big_blind.hole_cards }",
+      @hand.community_cards.join(","),
       "",
       "POT AWARDED TO #{ @hand.winner.name }",
       ""]
