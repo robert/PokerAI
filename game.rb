@@ -1,20 +1,20 @@
-class Poker::Game
+module Poker
+  class Game
+    START_STACK = 1500
 
-  START_STACK = 1500
+    SMALL_BLIND_AMOUNT = 25
+    BIG_BLIND_AMOUNT = 50
 
-  SMALL_BLIND_AMOUNT = 25
-  BIG_BLIND_AMOUNT = 50
+    attr_accessor :players
+    attr_accessor :hands
 
-  attr_accessor :players
-  attr_accessor :hands
+    def initialize
+      @players = []
+      @hands = []
+    end
 
-  def initialize
-    self.players = []
-    self.hands = []
+    def current_hand
+      @hands.last
+    end
   end
-
-  def current_hand
-    hands.last
-  end
-
 end

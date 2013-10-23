@@ -1,46 +1,46 @@
-class Poker::HandHistory
+module Poker
+  class HandHistory
+    attr_accessor :actions
 
-  attr_accessor :actions
+    STREETS = [:preflop, :flop, :turn, :river]
 
-  STREETS = [:preflop, :flop, :turn, :river]
-
-  def initialize
-    self.actions = {
-      preflop: [],
-      flop: [],
-      turn: [],
-      river: []
-    }
-  end
-
-  def all_actions
-    all_actions = []
-    self.actions.each do |street, actions|
-      all_actions += actions
+    def initialize
+      @actions = {
+        preflop: [],
+        flop: [],
+        turn: [],
+        river: []
+      }
     end
-    all_actions
-  end
 
-  def current_street
-    if actions[:river].any?
-      :river
-    elsif actions[:turn].any?
-      :turn
-    elsif actions[:flop].any?
-      :flop
-    else
-      :preflop
-    end 
-  end
+    def all_actions
+      all_actions = []
+      self.actions.each do |street, actions|
+        all_actions += actions
+      end
+      all_actions
+    end
 
-  def last_action_on_current_street
-    actions[current_street].last
-  end
+    def current_street
+      if actions[:river].any?
+        :river
+      elsif actions[:turn].any?
+        :turn
+      elsif actions[:flop].any?
+        :flop
+      else
+        :preflop
+      end 
+    end
 
-  STREETS.each do |street|
-    define_method :"#{ street }?" do
-      self.current_street == street
+    def last_action_on_current_street
+      @actions[current_street].last
+    end
+
+    STREETS.each do |street|
+      define_method :"#{ street }?" do
+        current_street == street
+      end
     end
   end
-
 end

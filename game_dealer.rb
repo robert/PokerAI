@@ -1,30 +1,29 @@
-class Poker::GameDealer
+module Poker
+  class GameDealer
+    attr_reader :game
 
-  attr_reader :game
-  delegate :players, :hands, to: :game
-
-  def initialize game
-    @game = game
-  end
-
-  def add_player_to_game player
-    players << player
-    player.stack_size = Poker::Game::START_STACK
-  end
-
-  def deal_game
-    until players.any?(&:bust?) || hands.count > 100
-      hand = Poker::Hand.new( self )
-      hands << hand
-      Poker::HandDealer.new(hand).deal_hand
+    def initialize game
+      @game = game
     end
-    if players[0].bust?
-      puts "#{ players[1].name } WINS!!!"
-    elsif players[1].bust?
-      puts "#{ players[0].name } WINS!!!"
-    else
-      puts "NO ONE WINS????"
+
+    def add_player_to_game player
+      @game.players << player
+      player.stack_size = Poker::Game::START_STACK
+    end
+
+    def deal_game
+      until @game.players.any?(&:bust?) || @game.hands.count > 100
+        hand = Poker::Hand.new(sel )
+        @game.hands << hand
+        Poker::HandDealer.new(hand).deal_hand
+      end
+      if @game.players[0].bust?
+        puts "#{ @game.players[1].name } WINS!!!"
+      elsif @game.players[1].bust?
+        puts "#{ @game.players[0].name } WINS!!!"
+      else
+        puts "NO ONE WINS????"
+      end
     end
   end
-
 end
