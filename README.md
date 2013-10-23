@@ -7,3 +7,5 @@ To define your AI, define a class that inherits from `Poker::Player` and overrid
 See `example.rb` for an example of running a match.
 
 Coming maybe: full gem-ification, improvements to the AI definition API. Maybe even a DSL for simple/common operations.
+
+Extracted from a super-ambitious weekend project to build a UI for pokerbot battling - https://github.com/pitchinvasion/poker
